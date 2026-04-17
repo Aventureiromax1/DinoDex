@@ -106,7 +106,7 @@ public class DinossauroDAO {
             throw e;
         }
     }
-    //cria uma 2° tabela, importa os dados, exclui a antiga e renomeia a nova para o nome da antiga
+    //cria uma 2 tabela, importa os dados, exclui a antiga e renomeia a nova para o nome da antiga
     public void reorganizarIds() throws SQLException {
         String createNewTable = "CREATE TABLE public.dinossauro_new (" +
                                 "id SERIAL PRIMARY KEY, " +

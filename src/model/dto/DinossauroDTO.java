@@ -76,6 +76,4 @@ public class DinossauroDTO {
     public void setDataCriacao(Timestamp dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
-
-    // DTO não deve conter lógica de persistência
 }

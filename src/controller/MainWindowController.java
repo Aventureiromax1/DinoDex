@@ -1,4 +1,4 @@
-package controller;
+package dinossauro;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -12,15 +12,17 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TabPane;
+import model.dao.DinossauroDAO;
 import model.dto.DinossauroDTO;
-import model.service.DinossauroService;
-import util.DialogUtil;
-import util.ValidationUtil;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainWindowController {
+
+    private static final Logger LOGGER = Logger.getLogger(MainWindowController.class.getName());
 
     @FXML private TabPane tabPane;
 
@@ -61,7 +63,7 @@ public class MainWindowController {
 
     @FXML private Button btnAtualizarLista;
 
-    private final DinossauroService service = new DinossauroService();
+    private final DinossauroDAO dao = new DinossauroDAO();
 
     @FXML
     private void initialize() {
@@ -100,27 +102,27 @@ public class MainWindowController {
 
     private void carregarLista() {
         try {
-            List<DinossauroDTO> lista = service.listarTodos();
+            List<DinossauroDTO> lista = dao.listar();
             ObservableList<DinossauroDTO> obs = FXCollections.observableArrayList(lista);
             tabelaDinossauros.setItems(obs);
             tabelaExclusao.setItems(FXCollections.observableArrayList(lista));
         } catch (Exception e) {
-            DialogUtil.logError("Erro ao carregar lista de dinossauros", e);
-            DialogUtil.showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível carregar a lista.", e.getMessage());
+            LOGGER.log(Level.SEVERE, "Erro ao carregar lista de dinossauros", e);
+            showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível carregar a lista.", e.getMessage());
         }
     }
 
     @FXML
     private void handleAtualizarLista() {
         carregarLista();
-        DialogUtil.showAlert(Alert.AlertType.INFORMATION, "Concluído", "Lista atualizada", "A lista de dinossauros foi atualizada.");
+        showAlert(Alert.AlertType.INFORMATION, "Concluído", "Lista atualizada", "A lista de dinossauros foi atualizada.");
     }
 
     @FXML
     private void handleEditarSelecionado() {
         DinossauroDTO sel = tabelaDinossauros.getSelectionModel().getSelectedItem();
         if (sel == null) {
-            DialogUtil.showAlert(Alert.AlertType.WARNING, "Atenção", "Nenhum item selecionado", "Selecione um dinossauro na lista.");
+            showAlert(Alert.AlertType.WARNING, "Atenção", "Nenhum item selecionado", "Selecione um dinossauro na lista.");
             return;
         }
         txtIdEdicao.setText(String.valueOf(sel.getId()));
@@ -138,7 +140,7 @@ public class MainWindowController {
     private void handleExcluirSelecionadoFromList() {
         DinossauroDTO sel = tabelaDinossauros.getSelectionModel().getSelectedItem();
         if (sel == null) {
-            DialogUtil.showAlert(Alert.AlertType.WARNING, "Atenção", "Nenhum item selecionado", "Selecione um dinossauro na lista.");
+            showAlert(Alert.AlertType.WARNING, "Atenção", "Nenhum item selecionado", "Selecione um dinossauro na lista.");
             return;
         }
         executarExclusao(sel.getId());
@@ -147,12 +149,12 @@ public class MainWindowController {
     @FXML
     private void handleReorganizarIds() {
         try {
-            service.reorganizarIds();
+            dao.reorganizarIds();
             carregarLista();
-            DialogUtil.showAlert(Alert.AlertType.INFORMATION, "Sucesso", "IDs Reorganizados", "Os IDs dos dinossauros foram reorganizados com sucesso.");
+            showAlert(Alert.AlertType.INFORMATION, "Sucesso", "IDs Reorganizados", "Os IDs dos dinossauros foram reorganizados com sucesso.");
         } catch (Exception e) {
-            DialogUtil.logError("Erro ao reorganizar IDs", e);
-            DialogUtil.showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível reorganizar os IDs.", e.getMessage());
+            LOGGER.log(Level.SEVERE, "Erro ao reorganizar IDs", e);
+            showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível reorganizar os IDs.", e.getMessage());
         }
     }
 
@@ -162,18 +164,18 @@ public class MainWindowController {
             DinossauroDTO novo = new DinossauroDTO();
             novo.setNome(txtNomeCadastro.getText());
             novo.setEspecie(txtEspecieCadastro.getText());
-            novo.setPeso(ValidationUtil.parseIntSafe(txtPesoCadastro.getText()));
-            novo.setAltura(ValidationUtil.parseDoubleSafe(txtAlturaCadastro.getText()));
-            novo.setComprimento(ValidationUtil.parseDoubleSafe(txtComprimentoCadastro.getText()));
+            novo.setPeso(parseIntSafe(txtPesoCadastro.getText()));
+            novo.setAltura(parseDoubleSafe(txtAlturaCadastro.getText()));
+            novo.setComprimento(parseDoubleSafe(txtComprimentoCadastro.getText()));
             novo.setComportamento(txtComportamentoCadastro.getText());
 
-            service.salvar(novo);
+            dao.inserir(novo);
             carregarLista();
             limparCamposCadastro();
-            DialogUtil.showAlert(Alert.AlertType.INFORMATION, "Concluído", "Cadastrado", "O dinossauro foi cadastrado com sucesso.");
+            showAlert(Alert.AlertType.INFORMATION, "Concluído", "Cadastrado", "O dinossauro foi cadastrado com sucesso.");
         } catch (Exception e) {
-            DialogUtil.logError("Erro ao cadastrar dinossauro", e);
-            DialogUtil.showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível cadastrar.", e.getMessage());
+            LOGGER.log(Level.SEVERE, "Erro ao cadastrar dinossauro", e);
+            showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível cadastrar.", e.getMessage());
         }
     }
 
@@ -194,21 +196,22 @@ public class MainWindowController {
     @FXML
     private void handleBuscarEdicao() {
         try {
-            int id = ValidationUtil.parseIntSafe(txtIdEdicao.getText());
-            Optional<DinossauroDTO> dOpt = service.buscarPorId(id);
-            if (dOpt.isPresent()) {
-                DinossauroDTO d = dOpt.get();
-                txtNomeEdicao.setText(Optional.ofNullable(d.getNome()).orElse(""));
-                txtEspecieEdicao.setText(Optional.ofNullable(d.getEspecie()).orElse(""));
-                txtPesoEdicao.setText(String.valueOf(d.getPeso()));
-                txtAlturaEdicao.setText(String.valueOf(d.getAltura()));
-                txtComprimentoEdicao.setText(String.valueOf(d.getComprimento()));
-                txtComportamentoEdicao.setText(Optional.ofNullable(d.getComportamento()).orElse(""));
-            } else {
-                DialogUtil.showAlert(Alert.AlertType.WARNING, "Não encontrado", "ID não localizado", "Nenhum dinossauro localizado.");
+            int id = parseIntSafe(txtIdEdicao.getText());
+            List<DinossauroDTO> lista = dao.listar();
+            for (DinossauroDTO d : lista) {
+                if (d.getId() == id) {
+                    txtNomeEdicao.setText(Optional.ofNullable(d.getNome()).orElse(""));
+                    txtEspecieEdicao.setText(Optional.ofNullable(d.getEspecie()).orElse(""));
+                    txtPesoEdicao.setText(String.valueOf(d.getPeso()));
+                    txtAlturaEdicao.setText(String.valueOf(d.getAltura()));
+                    txtComprimentoEdicao.setText(String.valueOf(d.getComprimento()));
+                    txtComportamentoEdicao.setText(Optional.ofNullable(d.getComportamento()).orElse(""));
+                    return;
+                }
             }
+            showAlert(Alert.AlertType.WARNING, "Não encontrado", "ID não localizado", "Nenhum dinossauro localizado.");
         } catch (Exception e) {
-            DialogUtil.showAlert(Alert.AlertType.WARNING, "Entrada inválida", "Erro", "Digite um ID numérico válido.");
+            showAlert(Alert.AlertType.WARNING, "Entrada inválida", "Erro", "Digite um ID numérico válido.");
         }
     }
 
@@ -216,29 +219,29 @@ public class MainWindowController {
     private void handleSalvarAlteracoes() {
         try {
             DinossauroDTO d = new DinossauroDTO();
-            d.setId(ValidationUtil.parseIntSafe(txtIdEdicao.getText()));
+            d.setId(parseIntSafe(txtIdEdicao.getText()));
             d.setNome(txtNomeEdicao.getText());
             d.setEspecie(txtEspecieEdicao.getText());
-            d.setPeso(ValidationUtil.parseIntSafe(txtPesoEdicao.getText()));
-            d.setAltura(ValidationUtil.parseDoubleSafe(txtAlturaEdicao.getText()));
-            d.setComprimento(ValidationUtil.parseDoubleSafe(txtComprimentoEdicao.getText()));
+            d.setPeso(parseIntSafe(txtPesoEdicao.getText()));
+            d.setAltura(parseDoubleSafe(txtAlturaEdicao.getText()));
+            d.setComprimento(parseDoubleSafe(txtComprimentoEdicao.getText()));
             d.setComportamento(txtComportamentoEdicao.getText());
 
-            service.atualizar(d);
+            dao.alterar(d);
             carregarLista();
-            DialogUtil.showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Atualizado", "Os dados foram alterados.");
+            showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Atualizado", "Os dados foram alterados.");
         } catch (Exception e) {
-            DialogUtil.showAlert(Alert.AlertType.ERROR, "Erro", "Erro ao alterar", e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erro", "Erro ao alterar", e.getMessage());
         }
     }
 
     @FXML
     private void handleExcluirPorId() {
         try {
-            int id = ValidationUtil.parseIntSafe(txtIdExclusao.getText());
+            int id = parseIntSafe(txtIdExclusao.getText());
             executarExclusao(id);
         } catch (Exception e) {
-            DialogUtil.showAlert(Alert.AlertType.WARNING, "Erro", "ID inválido", "Verifique o ID digitado.");
+            showAlert(Alert.AlertType.WARNING, "Erro", "ID inválido", "Verifique o ID digitado.");
         }
     }
 
@@ -258,7 +261,7 @@ public class MainWindowController {
     private void handleExcluirSelecionadoFromExclusao() {
         DinossauroDTO sel = tabelaExclusao.getSelectionModel().getSelectedItem();
         if (sel == null) {
-            DialogUtil.showAlert(Alert.AlertType.WARNING, "Atenção", "Nenhum item selecionado", "Selecione um dinossauro na lista.");
+            showAlert(Alert.AlertType.WARNING, "Atenção", "Nenhum item selecionado", "Selecione um dinossauro na lista.");
             return;
         }
         executarExclusao(sel.getId());
@@ -272,13 +275,31 @@ public class MainWindowController {
 
     private void executarExclusao(int id) {
         try {
-            service.excluir(id);
+            dao.excluir(id);
             carregarLista();
             txtIdExclusao.clear();
-            DialogUtil.showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Excluído", "Dinossauro removido com sucesso.");
+            showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Excluído", "Dinossauro removido com sucesso.");
         } catch (Exception e) {
-            DialogUtil.logError("Erro ao excluir", e);
-            DialogUtil.showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível excluir.", e.getMessage());
+            LOGGER.log(Level.SEVERE, "Erro ao excluir", e);
+            showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível excluir.", e.getMessage());
         }
+    }
+
+    private int parseIntSafe(String val) {
+        if (val == null || val.trim().isEmpty()) return 0;
+        return Integer.parseInt(val.trim());
+    }
+
+    private double parseDoubleSafe(String val) {
+        if (val == null || val.trim().isEmpty()) return 0.0;
+        return Double.parseDouble(val.trim());
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String header, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
