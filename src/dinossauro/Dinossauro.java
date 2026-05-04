@@ -7,20 +7,16 @@ import java.util.Scanner;
 import model.dao.DinossauroDAO;
 import model.dto.DinossauroDTO;
 
-/**
- * Interface simples em console para testar operações CRUD de dinossauros.
- */
 public class Dinossauro {
 
     public static void main(String[] args) {
-        // Ajuste para imprimir acentos corretamente no console
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
-
-        Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8.name());
-        DinossauroDAO dao = new DinossauroDAO();
         int opcao = -1;
 
         while (opcao != 0) {
+            // Instanciando o scanner localmente no loop do menu
+            Scanner scannerMenu = new Scanner(System.in, StandardCharsets.UTF_8.name());
+
             System.out.println("\n===========================");
             System.out.println("      MENU DINOSSAURO      ");
             System.out.println("===========================");
@@ -31,20 +27,20 @@ public class Dinossauro {
             System.out.println("0. Sair do sistema");
             System.out.print("Escolha uma opção: ");
 
-            opcao = lerNumeroSeguro(scanner);
+            opcao = lerNumeroSeguro(scannerMenu);
 
             switch (opcao) {
                 case 1:
-                    cadastrarDinossauro(scanner, dao);
+                    cadastrarDinossauro();
                     break;
                 case 2:
-                    listarDinossauros(dao);
+                    listarDinossauros();
                     break;
                 case 3:
-                    editarDinossauro(scanner, dao);
+                    editarDinossauro();
                     break;
                 case 4:
-                    excluirDinossauro(scanner, dao);
+                    excluirDinossauro();
                     break;
                 case 0:
                     System.out.println("\nSaindo do sistema... Até a próxima aventura!");
@@ -52,12 +48,15 @@ public class Dinossauro {
                 default:
                     System.out.println("\nOpção inválida! Tente digitar um número de 0 a 4.");
             }
+            // Evitando fechar o scannerMenu aqui para não matar o System.in do loop principal
         }
-        scanner.close();
     }
 
     // ------------------------------------------------------------------------
-    private static void cadastrarDinossauro(Scanner scanner, DinossauroDAO dao) {
+    private static void cadastrarDinossauro() {
+        Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8.name());
+        DinossauroDAO dao = new DinossauroDAO();
+
         System.out.println("\n--- CADASTRAR DINOSSAURO ---");
         DinossauroDTO novo = new DinossauroDTO();
 
@@ -80,9 +79,12 @@ public class Dinossauro {
         novo.setComportamento(scanner.nextLine());
 
         dao.inserir(novo);
+
+
     }
 
-    private static void listarDinossauros(DinossauroDAO dao) {
+    private static void listarDinossauros() {
+        DinossauroDAO dao = new DinossauroDAO();
         System.out.println("\n--- LISTA DE DINOSSAUROS CADASTRADOS ---");
         List<DinossauroDTO> dinossauros = dao.listar();
 
@@ -104,9 +106,12 @@ public class Dinossauro {
         }
     }
 
-    private static void editarDinossauro(Scanner scanner, DinossauroDAO dao) {
+    private static void editarDinossauro() {
+        Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8.name());
+        DinossauroDAO dao = new DinossauroDAO();
+
         System.out.println("\n--- EDITAR DINOSSAURO ---");
-        listarDinossauros(dao);
+        listarDinossauros();
 
         System.out.print("\nDigite o ID do dinossauro que deseja editar: ");
         int idEditar = lerNumeroSeguro(scanner);
@@ -133,16 +138,23 @@ public class Dinossauro {
         editado.setComportamento(scanner.nextLine());
 
         dao.alterar(editado);
+        scanner.close();
     }
 
-    private static void excluirDinossauro(Scanner scanner, DinossauroDAO dao) {
+    private static void excluirDinossauro() {
+        Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8.name());
+        DinossauroDAO dao = new DinossauroDAO();
+
         System.out.println("\n--- EXCLUIR DINOSSAURO ---");
         System.out.print("Digite o ID do dinossauro que deseja apagar: ");
         int idExcluir = lerNumeroSeguro(scanner);
 
         dao.excluir(idExcluir);
+        scanner.close();
     }
 
+    // Repassando o scanner criado nos métodos principais para as funções de leitura,
+    // garantindo que não estamos criando variáveis globais.
     private static int lerNumeroSeguro(Scanner scanner) {
         while (true) {
             try {

@@ -2,9 +2,6 @@ package model.dto;
 
 import java.sql.Timestamp;
 
-/**
- * DTO que representa os dados de um dinossauro.
- */
 public class DinossauroDTO {
 
     private int id;
@@ -78,5 +75,8 @@ public class DinossauroDTO {
 
     public void setDataCriacao(Timestamp dataCriacao) {
         this.dataCriacao = dataCriacao;
+    }
+
+    public void inserir(DinossauroDTO novo) {
     }
 }

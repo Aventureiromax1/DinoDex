@@ -13,7 +13,7 @@ public class Conexao {
 
     private static final Logger LOGGER = Logger.getLogger(Conexao.class.getName());
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/dinossauros";
+    private static final String URL = "jdbc:postgresql://localhost:5432/Dinossauros";
     private static final String USUARIO = "postgres";
     private static final String SENHA = "postgres";
 

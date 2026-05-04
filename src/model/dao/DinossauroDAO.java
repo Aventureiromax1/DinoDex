@@ -12,32 +12,29 @@ import java.util.logging.Logger;
 import model.Conexao;
 import model.dto.DinossauroDTO;
 
-/**
- * DAO que gerencia operações CRUD para dinossauros.
- */
 public class DinossauroDAO {
 
     private static final Logger LOGGER = Logger.getLogger(DinossauroDAO.class.getName());
 
     // CREATE
-    public void inserir(DinossauroDTO dinossauro) {
-        String sql = "INSERT INTO personagens (nome, raca, peso, altura, comprimento, comportamento) VALUES (?, ?, ?, ?, ?, ?)";
-
+    public void inserir(DinossauroDTO dinosaur) {
+        String sql = "INSERT INTO public.personagens (nome, raca, peso, altura, comprimento, comportamento) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = new Conexao().conectar();
              PreparedStatement pstm = conn.prepareStatement(sql)) {
 
-            pstm.setString(1, dinossauro.getNome());
-            pstm.setString(2, dinossauro.getEspecie());
-            pstm.setInt(3, dinossauro.getPeso());
-            pstm.setDouble(4, dinossauro.getAltura());
-            pstm.setDouble(5, dinossauro.getComprimento());
-            pstm.setString(6, dinossauro.getComportamento());
+
+            pstm.setString(1, dinosaur.getNome());
+            pstm.setString(2, dinosaur.getEspecie());
+            pstm.setInt(3, dinosaur.getPeso());
+            pstm.setDouble(4, dinosaur.getAltura());
+            pstm.setDouble(5, dinosaur.getComprimento());
+            pstm.setString(6, dinosaur.getComportamento());
 
             pstm.executeUpdate();
-            System.out.println("Sucesso: dinossauro inserido.");
+            System.out.println("Sucesso: dinosaur inserido.");
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Erro ao inserir dinossauro.", e);
-            System.err.println("Erro ao inserir dinossauro: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Erro ao inserir dinosaur.", e);
+            System.err.println("Erro ao inserir dinosaur: " + e.getMessage());
         }
     }
 
