@@ -12,10 +12,9 @@ public class Dinossauro {
     public static void main(String[] args) {
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
         int opcao = -1;
-
+        Scanner scannerPrincipal = new Scanner(System.in, "UTF-8");
         while (opcao != 0) {
-            // Instanciando o scanner localmente no loop do menu
-            Scanner scannerMenu = new Scanner(System.in, StandardCharsets.UTF_8.name());
+
 
             System.out.println("\n===========================");
             System.out.println("      MENU DINOSSAURO      ");
@@ -27,20 +26,20 @@ public class Dinossauro {
             System.out.println("0. Sair do sistema");
             System.out.print("Escolha uma opção: ");
 
-            opcao = lerNumeroSeguro(scannerMenu);
+            opcao = lerNumeroSeguro(scannerPrincipal);
 
             switch (opcao) {
                 case 1:
-                    cadastrarDinossauro();
+                    cadastrarDinossauro(scannerPrincipal);
                     break;
                 case 2:
                     listarDinossauros();
                     break;
                 case 3:
-                    editarDinossauro();
+                    editarDinossauro(scannerPrincipal);
                     break;
                 case 4:
-                    excluirDinossauro();
+                    excluirDinossauro(scannerPrincipal);
                     break;
                 case 0:
                     System.out.println("\nSaindo do sistema... Até a próxima aventura!");
@@ -48,38 +47,36 @@ public class Dinossauro {
                 default:
                     System.out.println("\nOpção inválida! Tente digitar um número de 0 a 4.");
             }
-            // Evitando fechar o scannerMenu aqui para não matar o System.in do loop principal
         }
+        scannerPrincipal.close();
     }
 
     // ------------------------------------------------------------------------
-    private static void cadastrarDinossauro() {
-        Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8.name());
+    private static void cadastrarDinossauro(Scanner scannerPrincipal) {
         DinossauroDAO dao = new DinossauroDAO();
 
         System.out.println("\n--- CADASTRAR DINOSSAURO ---");
         DinossauroDTO novo = new DinossauroDTO();
 
         System.out.print("Nome: ");
-        novo.setNome(scanner.nextLine());
+        novo.setNome(scannerPrincipal.nextLine());
 
         System.out.print("Espécie (ex.: Tiranossauro, Triceratops): ");
-        novo.setEspecie(scanner.nextLine());
+        novo.setEspecie(scannerPrincipal.nextLine());
 
         System.out.print("Peso (kg): ");
-        novo.setPeso(lerNumeroSeguro(scanner));
+        novo.setPeso(lerNumeroSeguro(scannerPrincipal));
 
         System.out.print("Altura (m): ");
-        novo.setAltura(lerNumeroDecimal(scanner));
+        novo.setAltura(lerNumeroDecimal(scannerPrincipal));
 
         System.out.print("Comprimento (m): ");
-        novo.setComprimento(lerNumeroDecimal(scanner));
+        novo.setComprimento(lerNumeroDecimal(scannerPrincipal));
 
         System.out.print("Comportamento (ex.: Herbívoro, Carnívoro): ");
-        novo.setComportamento(scanner.nextLine());
+        novo.setComportamento(scannerPrincipal.nextLine());
 
         dao.inserir(novo);
-
 
     }
 
@@ -106,55 +103,49 @@ public class Dinossauro {
         }
     }
 
-    private static void editarDinossauro() {
-        Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8.name());
+    private static void editarDinossauro(Scanner scannerPrincipal) {
         DinossauroDAO dao = new DinossauroDAO();
 
         System.out.println("\n--- EDITAR DINOSSAURO ---");
         listarDinossauros();
 
         System.out.print("\nDigite o ID do dinossauro que deseja editar: ");
-        int idEditar = lerNumeroSeguro(scanner);
+        int idEditar = lerNumeroSeguro(scannerPrincipal);
 
         DinossauroDTO editado = new DinossauroDTO();
         editado.setId(idEditar);
 
         System.out.print("Novo Nome: ");
-        editado.setNome(scanner.nextLine());
+        editado.setNome(scannerPrincipal.nextLine());
 
         System.out.print("Nova Espécie: ");
-        editado.setEspecie(scanner.nextLine());
+        editado.setEspecie(scannerPrincipal.nextLine());
 
         System.out.print("Novo Peso (kg): ");
-        editado.setPeso(lerNumeroSeguro(scanner));
+        editado.setPeso(lerNumeroSeguro(scannerPrincipal));
 
         System.out.print("Nova Altura (m): ");
-        editado.setAltura(lerNumeroDecimal(scanner));
+        editado.setAltura(lerNumeroDecimal(scannerPrincipal));
 
         System.out.print("Novo Comprimento (m): ");
-        editado.setComprimento(lerNumeroDecimal(scanner));
+        editado.setComprimento(lerNumeroDecimal(scannerPrincipal));
 
         System.out.print("Novo Comportamento: ");
-        editado.setComportamento(scanner.nextLine());
+        editado.setComportamento(scannerPrincipal.nextLine());
 
         dao.alterar(editado);
-        scanner.close();
     }
 
-    private static void excluirDinossauro() {
-        Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8.name());
+    private static void excluirDinossauro(Scanner scannerPrincipal) {
         DinossauroDAO dao = new DinossauroDAO();
 
         System.out.println("\n--- EXCLUIR DINOSSAURO ---");
         System.out.print("Digite o ID do dinossauro que deseja apagar: ");
-        int idExcluir = lerNumeroSeguro(scanner);
+        int idExcluir = lerNumeroSeguro(scannerPrincipal);
 
         dao.excluir(idExcluir);
-        scanner.close();
     }
 
-    // Repassando o scanner criado nos métodos principais para as funções de leitura,
-    // garantindo que não estamos criando variáveis globais.
     private static int lerNumeroSeguro(Scanner scanner) {
         while (true) {
             try {
