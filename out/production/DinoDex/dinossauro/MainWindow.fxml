@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:controller="dinossauro.MainWindowController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox prefHeight="700.0" prefWidth="900.0" spacing="10.0" style="-fx-padding: 20;">
+            <children>
+                <!-- Cabeçalho -->
+                <Label prefHeight="40.0" text="🦖 DinoDex - Sistema de Gerenciamento de Dinossauros" textFill="#2c3e50">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+
+                <!-- TabPane com as abas -->
+                <TabPane fx:id="tabPane" prefHeight="620.0" prefWidth="860.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                        <!-- Aba: Listar Dinossauros -->
+                        <Tab text="📋 Listar Dinossauros">
+                            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                                <children>
+                                    <VBox layoutX="10.0" layoutY="10.0" prefHeight="580.0" prefWidth="870.0" spacing="10.0">
+                                        <children>
+                                            <Label text="Lista de todos os dinossauros cadastrados:" textFill="#34495e">
+                                                <font>
+                                                    <Font size="14.0" />
+                                                </font>
+                                            </Label>
+
+                                            <!-- Tabela de Dinossauros -->
+                                            <TableView fx:id="tabelaDinossauros" prefHeight="450.0" prefWidth="850.0">
+                                                <columns>
+                                                    <TableColumn fx:id="colId" prefWidth="40.0" text="ID" />
+                                                    <TableColumn fx:id="colNome" prefWidth="120.0" text="Nome" />
+                                                    <TableColumn fx:id="colEspecie" prefWidth="100.0" text="Espécie" />
+                                                    <TableColumn fx:id="colPeso" prefWidth="80.0" text="Peso (kg)" />
+                                                    <TableColumn fx:id="colAltura" prefWidth="80.0" text="Altura (m)" />
+                                                    <TableColumn fx:id="colComprimento" prefWidth="100.0" text="Comprimento (m)" />
+                                                    <TableColumn fx:id="colComportamento" prefWidth="100.0" text="Comportamento" />
+                                                    <TableColumn fx:id="colDataCriacao" prefWidth="130.0" text="Data de Criação" />
+                                                </columns>
+                                            </TableView>
+
+                                            <!-- Botões de ação -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Button fx:id="btnAtualizarLista" onAction="#handleAtualizarLista" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" style="-fx-font-size: 12;" text="🔄 Atualizar Lista" />
+                                                    <Button fx:id="btnEditarSelecionado" onAction="#handleEditarSelecionado" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" style="-fx-font-size: 12;" text="✏️  Editar Selecionado" />
+                                                    <Button fx:id="btnExcluirSelecionado" onAction="#handleExcluirSelecionadoFromList" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" style="-fx-font-size: 12;" text="🗑️  Excluir Selecionado" />
+                                                </children>
+                                                <VBox.margin>
+                                                    <Insets top="10.0" />
+                                                </VBox.margin>
+                                            </HBox>
+                                        </children>
+                                    </VBox>
+                                </children>
+                            </AnchorPane>
+                        </Tab>
+
+                        <!-- Aba: Cadastrar Dinossauro -->
+                        <Tab text="➕ Cadastrar Dinossauro">
+                            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                                <children>
+                                    <VBox layoutX="20.0" layoutY="20.0" prefHeight="540.0" prefWidth="840.0" spacing="15.0">
+                                        <children>
+                                            <Label text="Preencha os dados do novo dinossauro:" textFill="#34495e">
+                                                <font>
+                                                    <Font size="14.0" />
+                                                </font>
+                                            </Label>
+
+                                            <!-- Campo: Nome -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Label prefWidth="120.0" text="Nome:" textFill="#2c3e50">
+                                                        <font>
+                                                            <Font size="12.0" />
+                                                        </font>
+                                                    </Label>
+                                                    <TextField fx:id="txtNomeCadastro" prefHeight="35.0" prefWidth="500.0" promptText="Ex: Tiranossauro Rex" />
+                                                </children>
+                                            </HBox>
+
+                                            <!-- Campo: Espécie -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Label prefWidth="120.0" text="Espécie:" textFill="#2c3e50">
+                                                        <Font size="12.0" />
+                                                    </Label>
+                                                    <TextField fx:id="txtEspecieCadastro" prefHeight="35.0" prefWidth="500.0" promptText="Ex: Tyrannosaurus rex" />
+                                                </children>
+                                            </HBox>
+
+                                            <!-- Campo: Peso -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Label prefWidth="120.0" text="Peso (kg):" textFill="#2c3e50">
+                                                        <Font size="12.0" />
+                                                    </Label>
+                                                    <TextField fx:id="txtPesoCadastro" prefHeight="35.0" prefWidth="500.0" promptText="Ex: 9000" />
+                                                </children>
+                                            </HBox>
+
+                                            <!-- Campo: Altura -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Label prefWidth="120.0" text="Altura (m):" textFill="#2c3e50">
+                                                        <Font size="12.0" />
+                                                    </Label>
+                                                    <TextField fx:id="txtAlturaCadastro" prefHeight="35.0" prefWidth="500.0" promptText="Ex: 3.6" />
+                                                </children>
+                                            </HBox>
+
+                                            <!-- Campo: Comprimento -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Label prefWidth="120.0" text="Comprimento (m):" textFill="#2c3e50">
+                                                        <Font size="12.0" />
+                                                    </Label>
+                                                    <TextField fx:id="txtComprimentoCadastro" prefHeight="35.0" prefWidth="500.0" promptText="Ex: 12.0" />
+                                                </children>
+                                            </HBox>
+
+                                            <!-- Campo: Comportamento -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Label prefWidth="120.0" text="Comportamento:" textFill="#2c3e50">
+                                                        <Font size="12.0" />
+                                                    </Label>
+                                                    <TextField fx:id="txtComportamentoCadastro" prefHeight="35.0" prefWidth="500.0" promptText="Ex: Carnívoro" />
+                                                </children>
+                                            </HBox>
+
+                                            <!-- Botões de ação -->
+                                            <HBox prefHeight="50.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Button fx:id="btnSalvarCadastro" onAction="#handleSalvarCadastro" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" style="-fx-font-size: 12;" text="✔️  Salvar Dinossauro" />
+                                                    <Button fx:id="btnLimparCadastro" onAction="#handleLimparCadastro" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" style="-fx-font-size: 12;" text="🔄 Limpar Campos" />
+                                                </children>
+                                                <VBox.margin>
+                                                    <Insets top="20.0" />
+                                                </VBox.margin>
+                                            </HBox>
+                                        </children>
+                                    </VBox>
+                                </children>
+                            </AnchorPane>
+                        </Tab>
+
+                        <!-- Aba: Editar Dinossauro -->
+                        <Tab text="✏️  Editar Dinossauro">
+                            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                                <children>
+                                    <VBox layoutX="20.0" layoutY="20.0" prefHeight="540.0" prefWidth="840.0" spacing="15.0">
+                                        <children>
+                                            <Label text="Selecione e edite um dinossauro:" textFill="#34495e">
+                                                <font>
+                                                    <Font size="14.0" />
+                                                </font>
+                                            </Label>
+
+                                            <!-- Campo: ID para buscar -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Label prefWidth="120.0" text="ID do Dinossauro:" textFill="#2c3e50">
+                                                        <Font size="12.0" />
+                                                    </Label>
+                                                    <TextField fx:id="txtIdEdicao" prefHeight="35.0" prefWidth="200.0" promptText="Ex: 1" />
+                                                    <Button fx:id="btnBuscarEdicao" onAction="#handleBuscarEdicao" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" style="-fx-font-size: 12;" text="🔍 Buscar" />
+                                                </children>
+                                            </HBox>
+
+                                            <Label text="─────────────────────────────────────" textFill="#bdc3c7" />
+
+                                            <!-- Campo: Nome -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Label prefWidth="120.0" text="Nome:" textFill="#2c3e50">
+                                                        <Font size="12.0" />
+                                                    </Label>
+                                                    <TextField fx:id="txtNomeEdicao" prefHeight="35.0" prefWidth="500.0" promptText="Ex: Tiranossauro Rex" />
+                                                </children>
+                                            </HBox>
+
+                                            <!-- Campo: Espécie -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Label prefWidth="120.0" text="Espécie:" textFill="#2c3e50">
+                                                        <Font size="12.0" />
+                                                    </Label>
+                                                    <TextField fx:id="txtEspecieEdicao" prefHeight="35.0" prefWidth="500.0" promptText="Ex: Tyrannosaurus rex" />
+                                                </children>
+                                            </HBox>
+
+                                            <!-- Campo: Peso -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Label prefWidth="120.0" text="Peso (kg):" textFill="#2c3e50">
+                                                        <Font size="12.0" />
+                                                    </Label>
+                                                    <TextField fx:id="txtPesoEdicao" prefHeight="35.0" prefWidth="500.0" promptText="Ex: 9000" />
+                                                </children>
+                                            </HBox>
+
+                                            <!-- Campo: Altura -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Label prefWidth="120.0" text="Altura (m):" textFill="#2c3e50">
+                                                        <Font size="12.0" />
+                                                    </Label>
+                                                    <TextField fx:id="txtAlturaEdicao" prefHeight="35.0" prefWidth="500.0" promptText="Ex: 3.6" />
+                                                </children>
+                                            </HBox>
+
+                                            <!-- Campo: Comprimento -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Label prefWidth="120.0" text="Comprimento (m):" textFill="#2c3e50">
+                                                        <Font size="12.0" />
+                                                    </Label>
+                                                    <TextField fx:id="txtComprimentoEdicao" prefHeight="35.0" prefWidth="500.0" promptText="Ex: 12.0" />
+                                                </children>
+                                            </HBox>
+
+                                            <!-- Campo: Comportamento -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Label prefWidth="120.0" text="Comportamento:" textFill="#2c3e50">
+                                                        <Font size="12.0" />
+                                                    </Label>
+                                                    <TextField fx:id="txtComportamentoEdicao" prefHeight="35.0" prefWidth="500.0" promptText="Ex: Carnívoro" />
+                                                </children>
+                                            </HBox>
+
+                                            <!-- Botões de ação -->
+                                            <HBox prefHeight="50.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Button fx:id="btnSalvarAlteracoes" onAction="#handleSalvarAlteracoes" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" style="-fx-font-size: 12;" text="✔️  Salvar Alterações" />
+                                                    <Button fx:id="btnCancelarEdicao" onAction="#handleCancelarEdicao" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" style="-fx-font-size: 12;" text="❌ Cancelar" />
+                                                </children>
+                                                <VBox.margin>
+                                                    <Insets top="20.0" />
+                                                </VBox.margin>
+                                            </HBox>
+                                        </children>
+                                    </VBox>
+                                </children>
+                            </AnchorPane>
+                        </Tab>
+
+                        <!-- Aba: Excluir Dinossauro -->
+                        <Tab text="🗑️  Excluir Dinossauro">
+                            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                                <children>
+                                    <VBox layoutX="20.0" layoutY="20.0" prefHeight="540.0" prefWidth="840.0" spacing="20.0">
+                                        <children>
+                                            <Label text="Excluir um dinossauro do banco de dados:" textFill="#34495e">
+                                                <font>
+                                                    <Font size="14.0" />
+                                                </font>
+                                            </Label>
+
+                                            <Label text="⚠️  AVISO: Esta ação não pode ser desfeita!" textFill="#e74c3c">
+                                                <font>
+                                                    <Font size="12.0" />
+                                                </font>
+                                            </Label>
+
+                                            <Label text="─────────────────────────────────────" textFill="#bdc3c7" />
+
+                                            <Label prefHeight="20.0" text="Lista de dinossauros cadastrados:" textFill="#34495e">
+                                                <font>
+                                                    <Font size="12.0" />
+                                                </font>
+                                            </Label>
+
+                                            <!-- Tabela de seleção -->
+                                            <TableView fx:id="tabelaExclusao" prefHeight="300.0" prefWidth="800.0">
+                                                <columns>
+                                                    <TableColumn fx:id="colIdExc" prefWidth="40.0" text="ID" />
+                                                    <TableColumn fx:id="colNomeExc" prefWidth="120.0" text="Nome" />
+                                                    <TableColumn fx:id="colEspecieExc" prefWidth="100.0" text="Espécie" />
+                                                    <TableColumn fx:id="colPesoExc" prefWidth="80.0" text="Peso (kg)" />
+                                                    <TableColumn fx:id="colAlturaeExc" prefWidth="80.0" text="Altura (m)" />
+                                                    <TableColumn fx:id="colComprimentoExc" prefWidth="100.0" text="Comprimento (m)" />
+                                                    <TableColumn fx:id="colComportamentoExc" prefWidth="100.0" text="Comportamento" />
+                                                </columns>
+                                            </TableView>
+
+                                            <!-- Busca por ID -->
+                                            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Label prefWidth="120.0" text="ID do Dinossauro:" textFill="#2c3e50">
+                                                        <Font size="12.0" />
+                                                    </Label>
+                                                    <TextField fx:id="txtIdExclusao" prefHeight="35.0" prefWidth="200.0" promptText="Ex: 1" />
+                                                </children>
+                                                <VBox.margin>
+                                                    <Insets top="10.0" />
+                                                </VBox.margin>
+                                            </HBox>
+
+                                            <!-- Botões de ação -->
+                                            <HBox prefHeight="50.0" prefWidth="200.0" spacing="10.0">
+                                                <children>
+                                                    <Button fx:id="btnExcluirSelecionadoExc" onAction="#handleExcluirSelecionadoFromExclusao" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" style="-fx-font-size: 12; -fx-text-fill: white; -fx-background-color: #e74c3c;" text="🗑️  Excluir Selecionado" />
+                                                    <Button fx:id="btnCancelarExclusao" onAction="#handleCancelarExclusao" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" style="-fx-font-size: 12;" text="❌ Cancelar" />
+                                                </children>
+                                                <VBox.margin>
+                                                    <Insets top="10.0" />
+                                                </VBox.margin>
+                                            </HBox>
+                                        </children>
+                                    </VBox>
+                                </children>
+                            </AnchorPane>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
+
