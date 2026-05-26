@@ -31,10 +31,10 @@ public class DinossauroDAO {
             pstm.setString(6, dinosaur.getComportamento());
 
             pstm.executeUpdate();
-            System.out.println("Sucesso: dinosaur inserido.");
+            LOGGER.info("Sucesso: dinosaur inserido.");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Erro ao inserir dinosaur.", e);
-            System.err.println("Erro ao inserir dinosaur: " + e.getMessage());
+            // Erro já logado acima
         }
     }
 
@@ -62,7 +62,7 @@ public class DinossauroDAO {
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Erro ao listar dinossauros.", e);
-            System.err.println("Erro ao listar dinossauros: " + e.getMessage());
+            // Erro já logado acima
         }
         return listaDinossauros;
     }
@@ -84,13 +84,13 @@ public class DinossauroDAO {
 
             int updated = pstm.executeUpdate();
             if (updated > 0) {
-                System.out.println("Sucesso: dinossauro alterado.");
+                LOGGER.info("Sucesso: dinossauro alterado.");
             } else {
-                System.out.println("Atenção: nenhum registro foi alterado (ID não encontrado).");
+                LOGGER.warning("Atenção: nenhum registro foi alterado (ID não encontrado).");
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Erro ao alterar dinossauro.", e);
-            System.err.println("Erro ao alterar dinossauro: " + e.getMessage());
+            // Erro já logado acima
         }
     }
 
@@ -104,13 +104,13 @@ public class DinossauroDAO {
             pstm.setInt(1, id);
             int deleted = pstm.executeUpdate();
             if (deleted > 0) {
-                System.out.println("Sucesso: dinossauro excluído.");
+                LOGGER.info("Sucesso: dinossauro excluído.");
             } else {
-                System.out.println("Atenção: nenhum registro foi excluído (ID não encontrado).");
+                LOGGER.warning("Atenção: nenhum registro foi excluído (ID não encontrado).");
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Erro ao excluir dinossauro.", e);
-            System.err.println("Erro ao excluir dinossauro: " + e.getMessage());
+            // Erro já logado acima
         }
     }
 }

@@ -77,6 +77,5 @@ public class DinossauroDTO {
         this.dataCriacao = dataCriacao;
     }
 
-    public void inserir(DinossauroDTO novo) {
-    }
+    // DTO não deve conter lógica de persistência
 }
