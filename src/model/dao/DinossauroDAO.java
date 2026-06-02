@@ -17,8 +17,8 @@ public class DinossauroDAO {
     private static final Logger LOGGER = Logger.getLogger(DinossauroDAO.class.getName());
 
     // CREATE
-    public void inserir(DinossauroDTO dinosaur) {
-        String sql = "INSERT INTO public.personagens (nome, raca, peso, altura, comprimento, comportamento) VALUES (?, ?, ?, ?, ?, ?)";
+    public void inserir(DinossauroDTO dinosaur) throws SQLException {
+        String sql = "INSERT INTO public.dinossauro (nome, raca, peso, altura, comprimento, comportamento) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = new Conexao().conectar();
              PreparedStatement pstm = conn.prepareStatement(sql)) {
 
@@ -34,13 +34,13 @@ public class DinossauroDAO {
             LOGGER.info("Sucesso: dinosaur inserido.");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Erro ao inserir dinosaur.", e);
-            // Erro já logado acima
+            throw e;
         }
     }
 
     // READ
     public List<DinossauroDTO> listar() {
-        String sql = "SELECT * FROM personagens ORDER BY id";
+        String sql = "SELECT * FROM dinossauro ORDER BY id";
         List<DinossauroDTO> listaDinossauros = new ArrayList<>();
 
         try (Connection conn = new Conexao().conectar();
@@ -51,7 +51,7 @@ public class DinossauroDAO {
                 DinossauroDTO d = new DinossauroDTO();
                 d.setId(rs.getInt("id"));
                 d.setNome(rs.getString("nome"));
-                d.setEspecie(rs.getString("raca"));
+                d.setEspecie(rs.getString("especie"));
                 d.setPeso(rs.getInt("peso"));
                 d.setAltura(rs.getDouble("altura"));
                 d.setComprimento(rs.getDouble("comprimento"));
@@ -69,7 +69,7 @@ public class DinossauroDAO {
 
     // UPDATE
     public void alterar(DinossauroDTO dinossauro) {
-        String sql = "UPDATE personagens SET nome=?, raca=?, peso=?, altura=?, comprimento=?, comportamento=? WHERE id=?";
+        String sql = "UPDATE dinossauro SET nome=?, raca=?, peso=?, altura=?, comprimento=?, comportamento=? WHERE id=?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement pstm = conn.prepareStatement(sql)) {
@@ -96,7 +96,7 @@ public class DinossauroDAO {
 
     // DELETE
     public void excluir(int id) {
-        String sql = "DELETE FROM personagens WHERE id=?";
+        String sql = "DELETE FROM dinossauro WHERE id=?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement pstm = conn.prepareStatement(sql)) {

@@ -34,4 +34,5 @@ echo "Compilando com JavaFX (module-path: $PATH_TO_FX)"
 javac --module-path "$PATH_TO_FX" --add-modules javafx.controls,javafx.fxml -d build/classes -cp postgresql-42.7.10.jar $JAVA_SOURCES
 
 echo "Executando aplicação..."
-java --module-path "$PATH_TO_FX" --add-modules javafx.controls,javafx.fxml -cp "build/classes:postgresql-42.7.10.jar" dinossauro.Dinossauro
+# Enable native access for javafx.graphics to avoid restricted method warnings on newer JVMs
+java --enable-native-access=javafx.graphics --module-path "$PATH_TO_FX" --add-modules javafx.controls,javafx.fxml -cp "build/classes:postgresql-42.7.10.jar" dinossauro.Dinossauro

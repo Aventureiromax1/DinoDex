@@ -13,9 +13,9 @@ public class Conexao {
 
     private static final Logger LOGGER = Logger.getLogger(Conexao.class.getName());
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/Dinossauros";
-    private static final String USUARIO = "postgres";
-    private static final String SENHA = "postgres";
+    private static final String URL = "jdbc:postgresql://localhost:5432/dinossauros";
+    private static final String USUARIO = "leo";
+    private static final String SENHA = "leo260908";
 
     /**
      * Abre e retorna uma nova conexão com o banco de dados.

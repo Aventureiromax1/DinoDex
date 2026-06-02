@@ -207,6 +207,34 @@ public class MainWindowController {
         }
     }
 
+    @FXML
+    private void handleCancelarEdicao() {
+        txtIdEdicao.clear();
+        txtNomeEdicao.clear();
+        txtEspecieEdicao.clear();
+        txtPesoEdicao.clear();
+        txtAlturaEdicao.clear();
+        txtComprimentoEdicao.clear();
+        txtComportamentoEdicao.clear();
+        tabPane.getSelectionModel().select(0);
+    }
+
+    @FXML
+    private void handleExcluirSelecionadoFromExclusao() {
+        DinossauroDTO sel = tabelaExclusao.getSelectionModel().getSelectedItem();
+        if (sel == null) {
+            showAlert(Alert.AlertType.WARNING, "Atenção", "Nenhum item selecionado", "Selecione um dinossauro na lista.");
+            return;
+        }
+        executarExclusao(sel.getId());
+    }
+
+    @FXML
+    private void handleCancelarExclusao() {
+        txtIdExclusao.clear();
+        tabPane.getSelectionModel().select(0);
+    }
+
     private void executarExclusao(int id) {
         try {
             dao.excluir(id);
