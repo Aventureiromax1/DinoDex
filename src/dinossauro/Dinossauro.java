@@ -6,10 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- * Classe principal que inicia a aplicação JavaFX usando o FXML criado.
- * Substitui a interface via terminal; não realiza impressões em terminal.
- */
 public class Dinossauro extends Application {
 
     public static void main(String[] args) {

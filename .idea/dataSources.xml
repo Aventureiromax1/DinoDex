@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="dinossauros@localhost" uuid="c847cd07-527d-4a76-adc8-eaee458b3d2a">
+    <data-source source="LOCAL" name="dinossauros@localhost" uuid="cb14d1d1-5fbd-4907-b161-d7409a314a34">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
-      <configured-by-url>true</configured-by-url>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/dinossauros</jdbc-url>
       <jdbc-additional-properties>

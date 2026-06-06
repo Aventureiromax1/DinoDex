@@ -119,6 +119,18 @@ public class MainWindowController {
         }
         executarExclusao(sel.getId());
     }
+    
+    @FXML
+    private void handleReorganizarIds() {
+        try {
+            dao.reorganizarIds();
+            carregarLista();
+            showAlert(Alert.AlertType.INFORMATION, "Sucesso", "IDs Reorganizados", "Os IDs dos dinossauros foram reorganizados com sucesso.");
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Erro ao reorganizar IDs", e);
+            showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível reorganizar os IDs.", e.getMessage());
+        }
+    }
 
     @FXML
     private void handleSalvarCadastro() {
@@ -189,7 +201,7 @@ public class MainWindowController {
             d.setComprimento(parseDoubleSafe(txtComprimentoEdicao.getText()));
             d.setComportamento(txtComportamentoEdicao.getText());
 
-            dao.alterar(d); // Executa a alteração no banco
+            dao.alterar(d);
             carregarLista();
             showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Atualizado", "Os dados foram alterados.");
         } catch (Exception e) {
