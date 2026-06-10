@@ -259,7 +259,6 @@ public class MainWindowController {
         }
     }
 
-    // Métodos utilitários auxiliares de conversão e alertas
     private int parseIntSafe(String val) {
         if (val == null || val.trim().isEmpty()) return 0;
         return Integer.parseInt(val.trim());
