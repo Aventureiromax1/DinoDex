@@ -1,5 +1,7 @@
 package dinossauro;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -34,6 +36,8 @@ public class MainWindowController {
     @FXML private TableColumn<DinossauroDTO, Double> colComprimento;
     @FXML private TableColumn<DinossauroDTO, String> colComportamento;
     @FXML private TableColumn<DinossauroDTO, Object> colDataCriacao;
+    @FXML private Button btnEditarSelecionado;
+    @FXML private Button btnExcluirSelecionado;
 
     // Cadastro tab
     @FXML private TextField txtNomeCadastro;
@@ -42,6 +46,7 @@ public class MainWindowController {
     @FXML private TextField txtAlturaCadastro;
     @FXML private TextField txtComprimentoCadastro;
     @FXML private TextField txtComportamentoCadastro;
+    @FXML private Button btnSalvarCadastro;
 
     // Edicao tab
     @FXML private TextField txtIdEdicao;
@@ -72,6 +77,27 @@ public class MainWindowController {
         colDataCriacao.setCellValueFactory(new PropertyValueFactory<>("dataCriacao"));
 
         carregarLista();
+
+        // Desabilitar o botão de salvar se algum campo de cadastro estiver vazio
+        BooleanBinding camposCadastroInvalidos = Bindings.createBooleanBinding(() ->
+            txtNomeCadastro.getText().trim().isEmpty() ||
+            txtEspecieCadastro.getText().trim().isEmpty() ||
+            txtPesoCadastro.getText().trim().isEmpty() ||
+            txtAlturaCadastro.getText().trim().isEmpty() ||
+            txtComprimentoCadastro.getText().trim().isEmpty() ||
+            txtComportamentoCadastro.getText().trim().isEmpty(),
+            txtNomeCadastro.textProperty(),
+            txtEspecieCadastro.textProperty(),
+            txtPesoCadastro.textProperty(),
+            txtAlturaCadastro.textProperty(),
+            txtComprimentoCadastro.textProperty(),
+            txtComportamentoCadastro.textProperty()
+        );
+        btnSalvarCadastro.disableProperty().bind(camposCadastroInvalidos);
+
+        // Desabilitar botões de editar e excluir se nada estiver selecionado
+        btnEditarSelecionado.disableProperty().bind(tabelaDinossauros.getSelectionModel().selectedItemProperty().isNull());
+        btnExcluirSelecionado.disableProperty().bind(tabelaDinossauros.getSelectionModel().selectedItemProperty().isNull());
     }
 
     private void carregarLista() {
