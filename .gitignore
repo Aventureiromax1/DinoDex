@@ -1,0 +1,5 @@
+# AI / Agent files
+*-plan.md
+*.jsonl
+*.md
+!README.md
