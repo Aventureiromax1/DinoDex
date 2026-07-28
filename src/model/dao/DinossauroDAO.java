@@ -7,15 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import model.Conexao;
+import model.db.Conexao;
 import model.dto.DinossauroDTO;
+import util.DialogUtil;
 
 public class DinossauroDAO {
-
-    private static final Logger LOGGER = Logger.getLogger(DinossauroDAO.class.getName());
 
     public void inserir(DinossauroDTO dinosaur) throws SQLException {
         String sql = "INSERT INTO public.dinossauro (nome, especie, peso, altura, comprimento, comportamento) VALUES (?, ?, ?, ?, ?, ?)";
@@ -30,14 +27,14 @@ public class DinossauroDAO {
             pstm.setString(6, dinosaur.getComportamento());
 
             pstm.executeUpdate();
-            LOGGER.info("Sucesso: dinosaur inserido.");
+            DialogUtil.logInfo("Sucesso: dinosaur inserido.");
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Erro ao inserir dinosaur.", e);
+            DialogUtil.logError("Erro ao inserir dinosaur.", e);
             throw e;
         }
     }
 
-    public List<DinossauroDTO> listar() {
+    public List<DinossauroDTO> listar() throws SQLException {
         String sql = "SELECT * FROM public.dinossauro ORDER BY id";
         List<DinossauroDTO> listaDinossauros = new ArrayList<>();
 
@@ -59,12 +56,13 @@ public class DinossauroDAO {
                 listaDinossauros.add(d);
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Erro ao listar dinossauros.", e);
+            DialogUtil.logError("Erro ao listar dinossauros.", e);
+            throw e;
         }
         return listaDinossauros;
     }
 
-    public void alterar(DinossauroDTO dinossauro) {
+    public void alterar(DinossauroDTO dinossauro) throws SQLException {
         String sql = "UPDATE public.dinossauro SET nome=?, especie=?, peso=?, altura=?, comprimento=?, comportamento=? WHERE id=?";
 
         try (Connection conn = new Conexao().conectar();
@@ -80,16 +78,17 @@ public class DinossauroDAO {
 
             int updated = pstm.executeUpdate();
             if (updated > 0) {
-                LOGGER.info("Sucesso: dinossauro alterado.");
+                DialogUtil.logInfo("Sucesso: dinossauro alterado.");
             } else {
-                LOGGER.warning("Atenção: nenhum registro foi alterado (ID não encontrado).");
+                DialogUtil.logWarning("Atenção: nenhum registro foi alterado (ID não encontrado).");
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Erro ao alterar dinossauro.", e);
+            DialogUtil.logError("Erro ao alterar dinossauro.", e);
+            throw e;
         }
     }
 
-    public void excluir(int id) {
+    public void excluir(int id) throws SQLException {
         String sql = "DELETE FROM public.dinossauro WHERE id=?";
 
         try (Connection conn = new Conexao().conectar();
@@ -98,12 +97,13 @@ public class DinossauroDAO {
             pstm.setInt(1, id);
             int deleted = pstm.executeUpdate();
             if (deleted > 0) {
-                LOGGER.info("Sucesso: dinossauro excluído.");
+                DialogUtil.logInfo("Sucesso: dinossauro excluído.");
             } else {
-                LOGGER.warning("Atenção: nenhum registro foi excluído (ID não encontrado).");
+                DialogUtil.logWarning("Atenção: nenhum registro foi excluído (ID não encontrado).");
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Erro ao excluir dinossauro.", e);
+            DialogUtil.logError("Erro ao excluir dinossauro.", e);
+            throw e;
         }
     }
     //cria uma 2° tabela, importa os dados, exclui a antiga e renomeia a nova para o nome da antiga
@@ -138,24 +138,24 @@ public class DinossauroDAO {
             stmt.execute(renameSequence);
 
             conn.commit();
-            LOGGER.info("Sucesso: IDs da tabela dinossauro reorganizados.");
+            DialogUtil.logInfo("Sucesso: IDs da tabela dinossauro reorganizados.");
         } catch (SQLException e) {
             if (conn != null) {
                 try {
                     conn.rollback();
-                    LOGGER.log(Level.WARNING, "Transação de reorganização de IDs foi revertida.", e);
+                    DialogUtil.logWarning("Transação de reorganização de IDs foi revertida.", e);
                 } catch (SQLException ex) {
-                    LOGGER.log(Level.SEVERE, "Erro ao reverter transação.", ex);
+                    DialogUtil.logError("Erro ao reverter transação.", ex);
                 }
             }
-            LOGGER.log(Level.SEVERE, "Erro ao reorganizar IDs.", e);
+            DialogUtil.logError("Erro ao reorganizar IDs.", e);
             throw e;
         } finally {
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
-                    LOGGER.log(Level.SEVERE, "Erro ao fechar conexão.", e);
+                    DialogUtil.logError("Erro ao fechar conexão.", e);
                 }
             }
         }
