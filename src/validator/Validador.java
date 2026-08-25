@@ -1,7 +1,12 @@
 package validator;
 
 import model.dto.DinossauroDTO;
+import java.util.List;
 
+/**
+ * Facade validator for DinossauroDTO kept for backward compatibility.
+ * Internally composes smaller, single-responsibility validators.
+ */
 public class Validador {
 
     private static final int NOME_MINIMO = 3;
@@ -53,35 +58,23 @@ public class Validador {
     }
 
     private boolean validarNome(String nome) {
-        if (nome == null || nome.trim().isEmpty()) {
-            mensagemErro = "Nome do dinossauro é obrigatório.";
-            return false;
-        }
-        if (nome.trim().length() < NOME_MINIMO) {
-            mensagemErro = "Nome deve ter pelo menos " + NOME_MINIMO + " caracteres.";
-            return false;
-        }
-        if (nome.trim().length() > NOME_MAXIMO) {
-            mensagemErro = "Nome não pode exceder " + NOME_MAXIMO + " caracteres.";
-            return false;
-        }
-        return true;
+        CompostoValidador<String> composto = new CompostoValidador<>(List.of(
+                new CampoObrigatorioValidador(),
+                new TamanhoValidador(NOME_MINIMO, NOME_MAXIMO)
+        ));
+        boolean ok = composto.validar(nome);
+        if (!ok) mensagemErro = composto.obterMensagemErro().replace("Campo", "Nome do dinossauro");
+        return ok;
     }
 
     private boolean validarEspecie(String especie) {
-        if (especie == null || especie.trim().isEmpty()) {
-            mensagemErro = "Espécie do dinossauro é obrigatória.";
-            return false;
-        }
-        if (especie.trim().length() < ESPECIE_MINIMO) {
-            mensagemErro = "Espécie deve ter pelo menos " + ESPECIE_MINIMO + " caracteres.";
-            return false;
-        }
-        if (especie.trim().length() > ESPECIE_MAXIMO) {
-            mensagemErro = "Espécie não pode exceder " + ESPECIE_MAXIMO + " caracteres.";
-            return false;
-        }
-        return true;
+        CompostoValidador<String> composto = new CompostoValidador<>(List.of(
+                new CampoObrigatorioValidador(),
+                new TamanhoValidador(ESPECIE_MINIMO, ESPECIE_MAXIMO)
+        ));
+        boolean ok = composto.validar(especie);
+        if (!ok) mensagemErro = composto.obterMensagemErro().replace("Campo", "Espécie do dinossauro");
+        return ok;
     }
 
     private boolean validarPeso(int peso) {
@@ -121,19 +114,13 @@ public class Validador {
     }
 
     private boolean validarComportamento(String comportamento) {
-        if (comportamento == null || comportamento.trim().isEmpty()) {
-            mensagemErro = "Comportamento do dinossauro é obrigatório.";
-            return false;
-        }
-        if (comportamento.trim().length() < COMPORTAMENTO_MINIMO) {
-            mensagemErro = "Comportamento deve ter pelo menos " + COMPORTAMENTO_MINIMO + " caracteres.";
-            return false;
-        }
-        if (comportamento.trim().length() > COMPORTAMENTO_MAXIMO) {
-            mensagemErro = "Comportamento não pode exceder " + COMPORTAMENTO_MAXIMO + " caracteres.";
-            return false;
-        }
-        return true;
+        CompostoValidador<String> composto = new CompostoValidador<>(List.of(
+                new CampoObrigatorioValidador(),
+                new TamanhoValidador(COMPORTAMENTO_MINIMO, COMPORTAMENTO_MAXIMO)
+        ));
+        boolean ok = composto.validar(comportamento);
+        if (!ok) mensagemErro = composto.obterMensagemErro().replace("Campo", "Comportamento do dinossauro");
+        return ok;
     }
 
     public String obterMensagemErro() {
