@@ -78,39 +78,24 @@ public class Validador {
     }
 
     private boolean validarPeso(int peso) {
-        if (peso < PESO_MINIMO) {
-            mensagemErro = "Peso deve ser maior ou igual a " + PESO_MINIMO + ".";
-            return false;
-        }
-        if (peso > PESO_MAXIMO) {
-            mensagemErro = "Peso não pode exceder " + PESO_MAXIMO + ".";
-            return false;
-        }
-        return true;
+        RangeValidador r = new RangeValidador(PESO_MINIMO, PESO_MAXIMO);
+        boolean ok = r.validar(peso);
+        if (!ok) mensagemErro = r.obterMensagemErro().replace("Valor", "Peso");
+        return ok;
     }
 
     private boolean validarAltura(double altura) {
-        if (altura < ALTURA_MINIMA) {
-            mensagemErro = "Altura deve ser maior ou igual a " + ALTURA_MINIMA + ".";
-            return false;
-        }
-        if (altura > ALTURA_MAXIMA) {
-            mensagemErro = "Altura não pode exceder " + ALTURA_MAXIMA + ".";
-            return false;
-        }
-        return true;
+        RangeValidador r = new RangeValidador(ALTURA_MINIMA, ALTURA_MAXIMA);
+        boolean ok = r.validar(altura);
+        if (!ok) mensagemErro = r.obterMensagemErro().replace("Valor", "Altura do dinossauro");
+        return ok;
     }
 
     private boolean validarComprimento(double comprimento) {
-        if (comprimento < COMPRIMENTO_MINIMO) {
-            mensagemErro = "Comprimento deve ser maior ou igual a " + COMPRIMENTO_MINIMO + ".";
-            return false;
-        }
-        if (comprimento > COMPRIMENTO_MAXIMO) {
-            mensagemErro = "Comprimento não pode exceder " + COMPRIMENTO_MAXIMO + ".";
-            return false;
-        }
-        return true;
+        RangeValidador r = new RangeValidador(COMPRIMENTO_MINIMO, COMPRIMENTO_MAXIMO);
+        boolean ok = r.validar(comprimento);
+        if (!ok) mensagemErro = r.obterMensagemErro().replace("Valor", "Comprimento do dinossauro");
+        return ok;
     }
 
     private boolean validarComportamento(String comportamento) {
